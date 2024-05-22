@@ -1,19 +1,25 @@
-from loguru import logger
-from aiogram import executor
 import asyncio
+import logging
 
-from bot_configure import dp
-from handlers import start_bot
+from aiogram import Bot, Dispatcher
+
+from config import API_TOKEN
+from handlers.change_table import table_router
+from handlers.start_bot import start_router
 
 
-def main() -> None:
-    start_bot.start_handler(dp)
+async def main() -> None:
+    """
+    Старт бота, подключение файлов бота.
+    """
+    bot = Bot(token=API_TOKEN)
+    dp = Dispatcher()
+    dp.include_routers(start_router,
+                       table_router)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    main()
-
-    logger.success("start")
-    loop = asyncio.get_event_loop()
-
-    executor.start_polling(dp, loop=dp.loop)
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(main())

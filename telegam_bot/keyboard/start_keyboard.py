@@ -1,7 +1,7 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram import types
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-
-def choice_mode() -> InlineKeyboardMarkup:
+def choice_mode() -> InlineKeyboardBuilder:
     """
     Кнопка выбора режима работы с таблицей.
     Привязана к стартовому сообщению.
@@ -15,11 +15,14 @@ def choice_mode() -> InlineKeyboardMarkup:
     :return: inline keyboard
     """
 
-    keyboard = InlineKeyboardMarkup(row_width=2)
-
-    keyboard.add(
-        InlineKeyboardButton(text="Приёмка", callback_data="ok_urfu"),
-        InlineKeyboardButton(text="Свой режим", callback_data="individual_mode")
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="УрФУ",
+        callback_data="ok_urfu_mode")
+    )
+    builder.add(types.InlineKeyboardButton(
+        text="Свои настройки",
+        callback_data="individual_mode")
     )
 
-    return keyboard
+    return builder
